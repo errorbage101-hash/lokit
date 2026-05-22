@@ -1,6 +1,5 @@
 package com.elshoura.lokit.security;
 
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +23,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/auth/")
+
+        return "OPTIONS".equalsIgnoreCase(request.getMethod())
+                || path.startsWith("/auth/")
                 || path.equals("/error")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/swagger-ui");
+
     }
 
     @Override
