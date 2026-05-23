@@ -46,7 +46,7 @@ public class AccountController {
     }
 
     @Operation(summary = "Change current user password")
-    @PatchMapping("/password")
+    @PutMapping ("/password")
     public ResponseEntity<Void> changePasswordApi(
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails userDetails,
