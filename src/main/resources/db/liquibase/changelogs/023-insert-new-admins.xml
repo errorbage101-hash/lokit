@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+
+    <changeSet id="023-insert-admins" author="MohamedElshoura">
+
+        <insert tableName="users">
+            <column name="first_name" value="Mohamed"/>
+            <column name="last_name" value="Elshoura"/>
+            <column name="email" value="mohamed_elshoura2026@lokit.com"/>
+            <column name="password" value="$2a$10$jba79vbVmRO0aOEYQRc0N.3rjmDpjui4Ir33lwiwvN3E3M7Qv.2Q2"/>
+            <column name="phone" value="01551639873"/>
+            <column name="role" value="ADMIN"/>
+            <column name="enabled" value="true"/>
+            <column name="email_verified" value="true"/>
+
+        </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>email='admins@lokit.com'</where>
+            </delete>
+
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
