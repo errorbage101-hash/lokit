@@ -6,6 +6,7 @@ import com.elshoura.lokit.repository.ProductImageRepository;
 import com.elshoura.lokit.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -21,6 +22,8 @@ public class HomeProductServiceImpl implements HomeProductService {
     private final ProductImageRepository productImageRepository;
 
     @Override
+    @Transactional(readOnly = true)
+
     public List<ProductSearchResponse> getNewArrivals() {
         return productRepository.findTop8ByActiveTrueOrderByCreatedAtDesc()
                 .stream()
@@ -29,6 +32,8 @@ public class HomeProductServiceImpl implements HomeProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+
     public List<ProductSearchResponse> getLatestProducts() {
         return productRepository.findTop12ByActiveTrueOrderByCreatedAtDesc()
                 .stream()
@@ -37,6 +42,7 @@ public class HomeProductServiceImpl implements HomeProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductSearchResponse> getProductsByDepartment(Long departmentId) {
         return productRepository.findByDepartmentIdAndActiveTrueOrderByCreatedAtDesc(departmentId)
                 .stream()
@@ -55,6 +61,7 @@ public class HomeProductServiceImpl implements HomeProductService {
                 .stream()
                 .map(variant -> variant.getPrice())
                 .min(Comparator.naturalOrder())
+                .filter(price -> price != null)
                 .orElse(BigDecimal.ZERO);
 
         return ProductSearchResponse.builder()
