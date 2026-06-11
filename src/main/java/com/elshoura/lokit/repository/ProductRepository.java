@@ -32,4 +32,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> , JpaSpec
 
     @EntityGraph(attributePaths = {"variants", "brand", "category"})
     List<Product> findTop12ByActiveTrueOrderByCreatedAtDesc();
+
+    @Override
+    @EntityGraph(attributePaths = {"brand", "category", "department", "variants"})
+    List<Product> findAll();
  }

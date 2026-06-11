@@ -8,6 +8,7 @@ import com.elshoura.lokit.repository.*;
 import com.elshoura.lokit.utils.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -72,6 +73,7 @@ public ProductResponse addProduct(ProductRequest productRequest){
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductResponse> getAllProducts(){
     return productRepository.findAll().stream()
             .map(ProductMapper::mapToProductResponse)
