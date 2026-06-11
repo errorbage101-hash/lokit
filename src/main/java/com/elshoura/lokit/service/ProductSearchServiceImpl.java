@@ -7,6 +7,7 @@ import com.elshoura.lokit.models.entitys.ProductSpecification;
 import com.elshoura.lokit.repository.ProductImageRepository;
 import com.elshoura.lokit.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class ProductSearchServiceImpl implements ProductSearchService {
     private final ProductImageRepository productImageRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductSearchResponse> searchProducts(
             String keyword,
             Long brandId,
