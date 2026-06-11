@@ -15,6 +15,7 @@ import com.elshoura.lokit.repository.ProductVariantRepository;
 import com.elshoura.lokit.repository.SizeRepository;
 import com.elshoura.lokit.utils.mapper.ProductVariantMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.elshoura.lokit.utils.mapper.ProductVariantMapper.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductVariantServiceImpl implements ProductVariantService {
 
     private final ProductVariantRepository productVariantRepository;
@@ -31,6 +33,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     private final ColorRepository colorRepository;
 
     @Override
+    @Transactional
     public ProductVariantResponse addVariant(ProductVariantRequest request){
 
         if (productVariantRepository.existsByProductIdAndSizeIdAndColorId(
@@ -58,6 +61,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
    }
     @Override
+    @Transactional
     public ProductVariantResponse updateVariant(Long id, ProductVariantRequest request) {
 
         ProductVariant variant = productVariantRepository.findById(id)
@@ -100,6 +104,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
                 .toList();
     }
     @Override
+    @Transactional
     public ProductVariantResponse getById(Long id) {
         ProductVariant variant = productVariantRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Variant not found"));
@@ -107,6 +112,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return mapToVariantResponse(variant);
     }
     @Override
+    @Transactional
     public List<ProductVariantResponse> getByProduct(Long productId) {
         return productVariantRepository.findByProductId(productId)
                 .stream()
@@ -115,6 +121,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @Transactional
     public ProductVariantResponse updateStock(Long variantId, UpdateStockRequest request) {
 
         ProductVariant variant = productVariantRepository.findById(variantId)
@@ -128,6 +135,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         ProductVariant variant = productVariantRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Variant not found"));
