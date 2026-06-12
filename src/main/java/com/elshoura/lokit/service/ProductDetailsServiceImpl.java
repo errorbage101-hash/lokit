@@ -11,6 +11,7 @@ import com.elshoura.lokit.repository.ProductImageRepository;
 import com.elshoura.lokit.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     private final ProductImageRepository productImageRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ProductDetailsResponse getProductDetails(Long productId) {
 
         Product product = productRepository.findById(productId)
