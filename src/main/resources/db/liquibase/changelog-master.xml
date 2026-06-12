@@ -50,4 +50,7 @@
 
     <include file="changelogs/022-insert-colors.xml" relativeToChangelogFile="true" />
 
+    <include file="changelogs/023-insert-new-admins.xml" relativeToChangelogFile="true" />
+
+
 </databaseChangeLog>
