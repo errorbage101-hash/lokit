@@ -1,6 +1,7 @@
 package com.elshoura.lokit.service;
 
 import com.elshoura.lokit.errors.exception.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import com.elshoura.lokit.errors.exception.QuantityExceedsException;
 import com.elshoura.lokit.errors.exception.UserForbiddenException;
 import com.elshoura.lokit.models.dto.request.CartItemRequest;
@@ -29,6 +30,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProductVariantRepository productVariantRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public CartResponse getMyCart(Long userId){
 
         Cart cart = cartService.getOrCreateCart(userId);
@@ -37,7 +39,8 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-   public CartResponse addItem(Long userId, CartItemRequest cartItemRequest){
+    @Transactional
+    public CartResponse addItem(Long userId, CartItemRequest cartItemRequest){
 
     Cart cart = cartService.getOrCreateCart(userId);
 
@@ -69,7 +72,8 @@ public class CartItemServiceImpl implements CartItemService {
         return mapCart(cart);
 
     }
-
+    @Override
+    @Transactional
    public CartResponse updateItem(Long userId,Long itemId, UpdateCartItemRequest updateCartItemRequest){
 
  Cart cart = cartService.getOrCreateCart(userId);
@@ -90,6 +94,7 @@ if(!item.getCart().getId().equals(cart.getId())) {
    }
 
     @Override
+    @Transactional
     public CartResponse removeItem(Long userId, Long itemId) {
         Cart cart = cartService.getOrCreateCart(userId);
 
