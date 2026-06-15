@@ -13,6 +13,7 @@ import com.elshoura.lokit.repository.WishlistRepository;
 import com.elshoura.lokit.utils.mapper.WishlistMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,24 +29,26 @@ public class WishlistServiceImpl implements WishlistService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public WishlistResponse addWishlistItem(Long userId, WishlistRequest request){
 
-    if(wishlistRepository.existsByUserIdAndProductId(userId, request.productId())){
-        throw new AlreadyExistException("Product already in wishlist");
-    }
-    User user = userRepository.findById(userId)
-            .orElseThrow(()->new NotFoundException("User not found"));
+        if(wishlistRepository.existsByUserIdAndProductId(userId, request.productId())){
+            throw new AlreadyExistException("Product already in wishlist");
+        }
 
-    Product product = productRepository.findById(request.productId())
-            .orElseThrow(()->new NotFoundException("Product not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-        WishlistItem wishlistItem = toWishlist(user,product);
+        Product product = productRepository.findProductById(request.productId())
+                .orElseThrow(() -> new NotFoundException("Product not found"));
 
-       return toWishlistItemResponse(wishlistRepository.save(wishlistItem));
+        WishlistItem wishlistItem = toWishlist(user, product);
 
+        return toWishlistItemResponse(wishlistRepository.save(wishlistItem));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<WishlistResponse> getMyWishlist(Long userId){
         return wishlistRepository.findByUserId(userId)
                 .stream()
@@ -57,10 +60,11 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public void remove(Long userId, Long productId){
 
-        WishlistItem item = wishlistRepository.findByUserIdOrderByCreatedAtDesc(userId, productId)
+        WishlistItem item = wishlistRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new NotFoundException("Wishlist item not found"));
 
         wishlistRepository.delete(item);
+
     }
 
 }
