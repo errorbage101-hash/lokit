@@ -16,6 +16,7 @@ import com.elshoura.lokit.repository.ProductImageRepository;
 import com.elshoura.lokit.utils.enums.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private final ProductImageRepository productImageRepository;
 
     @Override
-  public List<OrderResponse> getMyOrders(Long userId){
+    @Transactional(readOnly = true)
+    public List<OrderResponse> getMyOrders(Long userId){
 
         return orderRepository.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -39,7 +41,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
     @Override
-   public OrderResponse getMyOrderById(Long userId,Long orderId){
+    @Transactional(readOnly = true)
+    public OrderResponse getMyOrderById(Long userId,Long orderId){
 
   Order order = orderRepository.findById(orderId)
           .orElseThrow(()-> new NotFoundException("Order not found"));
@@ -98,6 +101,7 @@ public class OrderServiceImpl implements OrderService {
 
     }
     @Override
+    @Transactional
     public OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request) {
 
         Order order = orderRepository.findById(orderId)
@@ -156,6 +160,7 @@ public class OrderServiceImpl implements OrderService {
 
     }
     @Override
+    @Transactional
     public OrderResponse cancelMyOrder(Long userId, Long orderId) {
 
         Order order = orderRepository.findById(orderId)
